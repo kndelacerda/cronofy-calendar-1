@@ -1,0 +1,61 @@
+﻿@using CronofyCSharpSampleApp.Persistence.Models
+
+<div class="row">
+  <div class="col-xs-8">
+    <h2>Enterprise Connect</h2>
+  </div>
+
+  <div class="col-xs-4 text-right">
+    <a href="/serviceaccountusers/new" class="btn btn-primary btn-success">
+      Authorize User
+    </a>
+  </div>
+</div>
+
+<h3>Resources</h3>
+
+<table class="table table-striped table-hover">
+<thead>
+  <tr>
+    <th>Name</th>
+    <th>Email</th>
+  </tr>
+</thead>
+
+<tbody>
+  @foreach(var resource in ViewData["resources"] as IEnumerable<Cronofy.Resource>){
+    <tr>
+      <td>@resource.Name</td>
+      <td>@resource.Email</td>
+    </tr>
+  }
+</tbody>
+</table>
+
+<h3>Users</h3>
+
+<table class="table table-striped table-hover">
+<thead>
+  <tr>
+    <th>Name</th>
+    <th>Status</th>
+    <th></th>
+  </tr>
+</thead>
+    
+<tbody>
+  @foreach(var user in ViewData["users"] as IEnumerable<EnterpriseConnectUserData>){
+    <tr>
+      <td>@user.Email</td>
+      <td>@user.Status</td>
+      <td>
+        @if(user.Status == EnterpriseConnectUserData.ConnectedStatus.Linked){
+          <a href="/serviceaccountusers/show/@user.CronofyUID">
+            View
+          </a>
+        }
+      </td>
+    </tr>
+  }
+</tbody>
+</table>

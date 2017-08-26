@@ -1,0 +1,69 @@
+﻿@model Cronofy.Event
+
+<div class="row">
+  <div class="col-xs-8">
+    <h2>@ViewData["calendarName"] - @Model.Summary</h2>
+  </div>
+
+    @if(!@Model.EventId.IsEmpty()){
+    <div class="col-xs-4 text-right">
+      <a href="/events/edit/@Model.EventUid" class="btn btn-primary">
+        Edit
+      </a>
+      @using(Html.BeginForm("Delete", "Events", FormMethod.Post, new { @class = "button_to" })){
+        @Html.HiddenFor(model => model.CalendarId)
+        @Html.HiddenFor(model => model.EventId)
+        <input type="submit" value="Delete" class="btn btn-danger" />
+      }
+    </div>
+    }
+</div>
+
+<dl class="dl-horizontal">
+  @if(!@Model.EventId.IsEmpty()){
+    <dt>Event ID</dt>
+    <dd>@Model.EventId</dd>
+  }
+
+  <dt>Event UID</dt>
+  <dd>@Model.EventUid</dd>
+
+  <dt>Summary</dt>
+  <dd>@Model.Summary</dd>
+
+  <dt>Created</dt>
+  <dd>@Model.Created</dd>
+
+  <dt>Description</dt>
+  <dd>@Model.Description</dd>
+
+  <dt>Start Date</dt>
+  <dd>@(Model.Start.HasTime ? Model.Start.DateTimeOffset.ToString() : Model.Start.Date.ToString())</dd>
+
+  <dt>End Date</dt>
+  <dd>@(Model.End.HasTime ? Model.End.DateTimeOffset.ToString() : Model.End.Date.ToString())</dd>
+
+@if(Model.Location != null && !String.IsNullOrEmpty(Model.Location.Description)){
+  <dt>Location</dt>
+  <dd>@Model.Location.Description</dd>
+}
+	
+@if(Model.Location != null && Model.Location.Latitude != null && Model.Location.Longitude != null){
+  if(ViewData.ContainsKey("google_maps_embed_api_key") && !String.IsNullOrEmpty(ViewData["google_maps_embed_api_key"].ToString())){
+  <dt>Map location</dt>
+  <dd>
+    <iframe
+    width="600"
+    height="450"
+    frameborder="0" style="border:0"
+    src="https://www.google.com/maps/embed/v1/place?key=@ViewData["google_maps_embed_api_key"]
+      &q=@Model.Location.Latitude,@Model.Location.Longitude" allowfullscreen>
+  </iframe>
+  </dd>
+  } else {
+  <dt>Latitude, Longitude</dt>
+  <dd>@Model.Location.Latitude, @Model.Location.Longitude</dd>
+  }
+}
+
+</dl>
